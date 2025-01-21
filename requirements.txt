@@ -1,0 +1,14 @@
+Django==5.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.3.1
+pymongo==4.6.1
+python-dotenv==1.0.0
+Pillow==10.1.0
+django-storages==1.14.2
+cryptography==41.0.7
+django-filter==23.5
+django-rest-auth==0.9.5
+django-allauth==0.59.0
+python-magic==0.4.27
+whitenoise==6.6.0 
