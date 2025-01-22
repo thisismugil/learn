@@ -13,6 +13,7 @@ from django.conf import settings
 import re
 from bson import ObjectId
 from datetime import datetime
+from time import gmtime, strftime
 
 client = MongoClient(settings.MONGODB_URI) # MongoDB connection
 db = client[settings.MONGODB_DATABASE] 
@@ -229,6 +230,24 @@ def get_host_contents(request, host_id):
         return Response({
             'error': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_host_contents(request, host_id):
+    try:
+        contents = list(contents_collection.find({'host_id': host_id}))
+        for content in contents:
+            content['_id'] = str(content['_id'])
+        
+        return Response({
+            'contents': contents
+        })
+    except Exception as e:
+        return Response({
+            'error': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
