@@ -9,8 +9,11 @@ import {
   ListItemText,
   Paper,
   Alert,
-  TextField
+  TextField,
+  AppBar,
+  Toolbar
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const HostDashboard = () => {
@@ -22,6 +25,7 @@ const HostDashboard = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const user = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,8 +84,24 @@ const HostDashboard = () => {
     fetchContents();
   }, [user.id]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('tokens');
+    navigate('/login/host');
+  };
+
   return (
     <Container maxWidth="md">
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Host Dashboard
+          </Typography>
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
       <Box sx={{ mt: 4, mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Welcome {user?.username}!
