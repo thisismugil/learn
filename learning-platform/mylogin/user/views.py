@@ -169,6 +169,7 @@ def upload_content(request):
         data = request.data
         heading = data.get('heading')
         description = data.get('description')
+        price = data.get('price')
 
         if not heading or not description:
             return Response({
@@ -179,6 +180,7 @@ def upload_content(request):
             content_data = {
                 'heading': heading,
                 'description': description,
+                'price': price,
                 'host_id': str(request.user.id),
                 'host_name': request.user.username,
                 'uploaded_at': datetime.now().isoformat()
@@ -188,6 +190,7 @@ def upload_content(request):
             content = Content.objects.create(  # Create Django model instance
                 heading=heading,
                 description=description,
+                price=price,
                 host=request.user,
                 mongodb_id=str(result.inserted_id)
             )
@@ -197,6 +200,7 @@ def upload_content(request):
                     'id': str(result.inserted_id),
                     'heading': heading,
                     'description': description,
+                    'price': price,
                     'host_name': request.user.username,
                     'uploaded_at': content_data['uploaded_at']
                 }

@@ -19,7 +19,8 @@ import axios from 'axios';
 const HostDashboard = () => {
   const [textContent, setTextContent] = useState({
     heading: '',
-    description: ''
+    description: '',
+    price: ''
   });
   const [uploadedContents, setUploadedContents] = useState([]);
   const [error, setError] = useState('');
@@ -36,15 +37,16 @@ const HostDashboard = () => {
   };
 
   const handleUpload = async () => {
-    if (!textContent.heading || !textContent.description) {
-      setError('Please provide both heading and description');
+    if (!textContent.heading || !textContent.description || !textContent.price) {
+      setError('Please provide heading, description, and price');
       return;
     }
 
     try {
       const response = await axios.post('http://localhost:8000/api/user/upload-content/', {
         heading: textContent.heading,
-        description: textContent.description
+        description: textContent.description,
+        price: textContent.price
       }, {
         headers: {
           'Authorization': `Bearer ${JSON.parse(localStorage.getItem('tokens')).access}`,
@@ -58,7 +60,8 @@ const HostDashboard = () => {
         setError('');
         setTextContent({
           heading: '',
-          description: ''
+          description: '',
+          price: ''
         });
       }
     } catch (err) {
@@ -138,11 +141,20 @@ const HostDashboard = () => {
               rows={4}
               variant="outlined"
             />
+            <TextField
+              label="Price"
+              name="price"
+              value={textContent.price}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              variant="outlined"
+            />
             <Button
               variant="contained"
               color="primary"
               onClick={handleUpload}
-              disabled={!textContent.heading || !textContent.description}
+              disabled={!textContent.heading || !textContent.description || !textContent.price}
             >
               Upload Content
             </Button>
@@ -161,6 +173,9 @@ const HostDashboard = () => {
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {content.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Price: ${content.price}
                 </Typography>
                 <Typography variant="caption" display="block" gutterBottom>
                   Uploaded on: {new Date(content.uploaded_at).toLocaleDateString()}

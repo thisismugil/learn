@@ -42,6 +42,7 @@ class CustomUser(AbstractUser):
 class Content(models.Model):
     heading = models.CharField(max_length=200)
     description = models.TextField()
+    price = models.FloatField()
     host = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='contents')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     mongodb_id = models.CharField(max_length=24, null=True, blank=True)
