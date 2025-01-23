@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Container, 
   Typography, 
@@ -64,7 +64,7 @@ const HostDashboard = () => {
   };
 
   // Fetch uploaded contents when component mounts
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchContents = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/api/user/host-contents/${user.id}/`, {
@@ -164,4 +164,4 @@ const HostDashboard = () => {
   );
 };
 
-export default HostDashboard; 
+export default HostDashboard;

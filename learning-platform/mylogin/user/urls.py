@@ -8,4 +8,5 @@ urlpatterns = [
     path('upload-content/', views.upload_content, name='upload-content'),
     path('host-contents/<str:host_id>/', views.get_host_contents, name='host-contents'),
     path('available-contents/', views.get_available_contents, name='available-contents'),
+    path('available-contents/', views.get_available_contents, name='available-contents'),
 ] 

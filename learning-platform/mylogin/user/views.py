@@ -13,8 +13,8 @@ import re
 from bson import ObjectId
 from datetime import datetime
 
-client = MongoClient(settings.MONGODB_URI) # MongoDB connection
-db = client[settings.MONGODB_DATABASE] 
+client = MongoClient(settings.MONGODB_URI)  # MongoDB connection
+db = client[settings.MONGODB_DATABASE]
 users_collection = db['users']
 contents_collection = db['contents']
 
@@ -37,16 +37,16 @@ def register_user(request):
         username = data.get('username')
         password = data.get('password')
         user_type = data.get('user_type', 'user')
-        if not all([email, username, password]):  #basic_validation
+        if not all([email, username, password]):  # basic_validation
             return Response({
                 'error': 'Please provide all required fields: email, username, password'
             }, status=status.HTTP_400_BAD_REQUEST)
-        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'  #email_format
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'  # email_format
         if not re.match(email_pattern, email):
             return Response({
                 'error': 'Invalid email format'
-            }, status=status.HTTP_400_BAD_REQUEST)   
-        if len(username) < 3:  #username_validation 
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if len(username) < 3:  # username_validation
             return Response({
                 'error': 'Username must be at least 3 characters long'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -62,7 +62,7 @@ def register_user(request):
                 'error': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if users_collection.find_one({"$or": [  #checking users
+        if users_collection.find_one({"$or": [  # checking users
             {"username": username},
             {"email": email}
         ]}):
@@ -70,7 +70,7 @@ def register_user(request):
                 'error': 'User with this username or email already exists'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        #mongo_db structure
+        # mongo_db structure
         mongo_user = {
             "username": username,
             "email": email,
@@ -78,7 +78,7 @@ def register_user(request):
             "is_verified": True,
         }
         result = users_collection.insert_one(mongo_user)
-        user = CustomUser.objects.create_user(         # Create Django user
+        user = CustomUser.objects.create_user(  # Create Django user
             username=username,
             email=email,
             password=password,
@@ -121,7 +121,7 @@ def login_user(request):
             return Response({
                 'error': 'Please provide both login identifier and password'
             }, status=status.HTTP_400_BAD_REQUEST)
-        query = {"user_type": user_type}  #find user in mongo_db
+        query = {"user_type": user_type}  # find user in mongo_db
         if '@' in login_identifier:
             query["email"] = login_identifier
         else:
@@ -134,7 +134,7 @@ def login_user(request):
             }, status=status.HTTP_404_NOT_FOUND)
 
         try:
-            user = CustomUser.objects.get(username=mongo_user['username'])  #authentication
+            user = CustomUser.objects.get(username=mongo_user['username'])  # authentication
         except CustomUser.DoesNotExist:
             return Response({
                 'error': 'User authentication failed'
@@ -184,9 +184,8 @@ def upload_content(request):
                 'uploaded_at': datetime.now().isoformat()
             }
             
-            
-            result = contents_collection.insert_one(content_data)    # Insert into MongoDB        
-            content = Content.objects.create(                    # Create Django model instance       
+            result = contents_collection.insert_one(content_data)  # Insert into MongoDB
+            content = Content.objects.create(  # Create Django model instance
                 heading=heading,
                 description=description,
                 host=request.user,
@@ -235,7 +234,7 @@ def get_available_contents(request):
     try:
         contents = list(contents_collection.find())
         for content in contents:
-            content['_id'] = str(content['_id'])        
+            content['_id'] = str(content['_id'])
         return Response({
             'contents': contents
         })
