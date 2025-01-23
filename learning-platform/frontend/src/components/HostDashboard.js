@@ -4,9 +4,9 @@ import {
   Typography, 
   Button, 
   Box, 
-  List, 
-  ListItem, 
-  ListItemText,
+  Card, 
+  CardContent, 
+  CardActions, 
   Paper,
   Alert,
   TextField,
@@ -91,8 +91,8 @@ const HostDashboard = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <AppBar position="static">
+    <Box sx={{ width: '100%', height: '100vh' }}>
+      <AppBar position="static" color="transparent">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Host Dashboard
@@ -102,7 +102,7 @@ const HostDashboard = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Box sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Welcome {user?.username}!
         </Typography>
@@ -152,35 +152,33 @@ const HostDashboard = () => {
         <Typography variant="h6" gutterBottom>
           Your Uploaded Contents
         </Typography>
-        <Paper>
-          <List>
-            {uploadedContents.map((content, index) => (
-              <ListItem key={index} divider>
-                <ListItemText 
-                  primary={content.heading}
-                  secondary={
-                    <React.Fragment>
-                      <Typography component="span" variant="body2" color="text.primary">
-                        {content.description}
-                      </Typography>
-                      <br />
-                      <Typography component="span" variant="caption">
-                        Uploaded on: {new Date(content.uploaded_at).toLocaleDateString()}
-                      </Typography>
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-            ))}
-            {uploadedContents.length === 0 && (
-              <ListItem>
-                <ListItemText primary="No content uploaded yet" />
-              </ListItem>
-            )}
-          </List>
-        </Paper>
-      </Box>
-    </Container>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          {uploadedContents.map((content, index) => (
+            <Card key={index} sx={{ width: '100%', maxWidth: 345 }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {content.heading}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {content.description}
+                </Typography>
+                <Typography variant="caption" display="block" gutterBottom>
+                  Uploaded on: {new Date(content.uploaded_at).toLocaleDateString()}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                {/* Add any actions if needed */}
+              </CardActions>
+            </Card>
+          ))}
+          {uploadedContents.length === 0 && (
+            <Paper sx={{ p: 2 }}>
+              <Typography>No content uploaded yet</Typography>
+            </Paper>
+          )}
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
