@@ -81,6 +81,9 @@ const UserDashboard = () => {
                 <Typography variant="caption" display="block" gutterBottom>
                   Posted by: {content.host_name} on {new Date(content.uploaded_at).toLocaleDateString()}
                 </Typography>
+                <Typography variant="caption" display="block" gutterBottom>
+                  Price: {content.price} on {new Date(content.uploaded_at).toLocaleDateString()}
+                </Typography>
               </CardContent>
               <CardActions>
                 {/* Add any actions if needed */}
