@@ -12,11 +12,17 @@ from django.conf import settings
 import re
 from bson import ObjectId
 from datetime import datetime
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import random
+import string
 
 client = MongoClient(settings.MONGODB_URI) # MongoDB connection
 db = client[settings.MONGODB_DATABASE] 
 users_collection = db['users']
 contents_collection = db['contents']
+
 
 def validate_password(password):
     if len(password) < 8:
